@@ -64,21 +64,21 @@ def generate_samples(sentence,training_set):
                left_arc(queue, stack, arc_set)
                print("left arc:", arc_set[len(arc_set)-1])
                transition = {"left_arc",arc_set[len(arc_set)-1][0]}
-               continue
+               
           
-          if len(stack)>=2 and stack[len(stack)-1][6]== stack[len(stack)-2][0] and not s0_has_other_child(queue, stack):
+          elif len(stack)>=2 and stack[len(stack)-1][6]== stack[len(stack)-2][0] and not s0_has_other_child(queue, stack):
                #right arc
                right_arc(queue, stack, arc_set)
                print("right arc:", arc_set[len(arc_set)-1])
                transition = {"right_arc",arc_set[len(arc_set)-1][0]}
-               continue
+               
 
-          if len(queue)>0:
+          elif len(queue)>0:
                #shift
                shift(queue, stack, arc_set)
                print("shift:", stack[len(stack)-1])
                transition = {"shift", stack[len(stack)-1][1]}
-               continue
+               
 
           training_example = (configuration,transition)
           training_set.append(training_example)
