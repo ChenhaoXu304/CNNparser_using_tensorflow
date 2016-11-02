@@ -161,7 +161,7 @@ def generate_samples_from_sentence(inputs,options):
      while len(queue)>0 or len(stack)>=2:
           left_arc_executed=False
           if len(stack)>=2:
-               for i in range(2:len(stack)+1):
+               for i in range(2,len(stack)+1):
                     if stack[-i][6]== stack[len(stack)-1][0]:
                          #left arc
                          training_example = left_arc_return_example(queue, stack, arc_set,-i)
