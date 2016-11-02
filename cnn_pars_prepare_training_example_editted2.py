@@ -59,8 +59,8 @@ def right_arc_return_example(queue1, stack1, arc_set1,head_index):
      training_example["configuration"]["stack"] = list(stack1)
      training_example["configuration"]["arc_set"] = list(arc_set1)
      #do the right_arc
-     modifier = stack1.pop()
      head = stack1[head_index]
+     modifier = stack1.pop()
      
      label = modifier[7]
      arc = (label,head,modifier)
