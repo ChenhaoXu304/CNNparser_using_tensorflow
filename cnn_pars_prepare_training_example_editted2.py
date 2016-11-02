@@ -127,10 +127,21 @@ def process_the_root_return_example(queue1, stack1, arc_set1):
      show_example(training_example)
      '''
      #return the obtained training example
-     return training_example     
+     return training_example   
 
-def s0_has_other_child(queue1, stack1):
-     s0 = stack1[len(stack1)-1]
+def s0_has_other_children(queue1, stack1):
+     s0 = stack1[-1]
+     result = 0
+     for element in stack1:
+          if element[6] == s0[0]:
+               result = 1 
+     for element in queue1:
+          if element[6] == s0[0]:
+               result = 1
+     return result
+
+def modifier_has_other_children(queue1, stack1,modifier_index):
+     s0 = stack1[modifier_index]
      result = 0
      for element in stack1:
           if element[6] == s0[0]:
@@ -162,7 +173,7 @@ def generate_samples_from_sentence(inputs,options):
           left_arc_executed=False
           if len(stack)>=2:
                for i in range(2,len(stack)+1):
-                    if stack[-i][6]== stack[len(stack)-1][0]:
+                    if stack[-i][6]== stack[len(stack)-1][0] and not modifier_has_other_children(queue,stack,-i):
                          #left arc
                          training_example = left_arc_return_example(queue, stack, arc_set,-i)
                          training_set.append(training_example)
@@ -171,7 +182,7 @@ def generate_samples_from_sentence(inputs,options):
           if left_arc_executed:
                continue
           
-          if len(stack)>=2 and stack[len(stack)-1][6]== stack[len(stack)-2][0] and not s0_has_other_child(queue, stack):
+          if len(stack)>=2 and stack[len(stack)-1][6]== stack[len(stack)-2][0] and not s0_has_other_children(queue, stack):
                #right arc
                training_example = right_arc_return_example(queue, stack, arc_set)               
                training_set.append(training_example)
