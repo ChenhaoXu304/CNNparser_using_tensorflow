@@ -51,7 +51,7 @@ def shift_return_example(queue1, stack1, arc_set1):
      #return the obtained training example
      return training_example
 
-def right_arc_return_example(queue1, stack1, arc_set1):
+def right_arc_return_example(queue1, stack1, arc_set1,head_index):
      training_example = {}
      #explicitly  copy the current configuration to the training example
      training_example["configuration"] = {}
@@ -60,8 +60,8 @@ def right_arc_return_example(queue1, stack1, arc_set1):
      training_example["configuration"]["arc_set"] = list(arc_set1)
      #do the right_arc
      modifier = stack1.pop()
-     head = stack1.pop()
-     stack1.append(head)
+     head = stack1[head_index]
+     
      label = modifier[7]
      arc = (label,head,modifier)
      arc_set1.append(arc)
@@ -171,6 +171,7 @@ def generate_samples_from_sentence(inputs,options):
      #process the words in queue and stack
      while len(queue)>0 or len(stack)>=2:
           left_arc_executed=False
+          right_arc_executed=False
           if len(stack)>=2:
                for i in range(2,len(stack)+1):
                     if stack[-i][6]== stack[len(stack)-1][0] and not modifier_has_other_children(queue,stack,-i):
@@ -182,11 +183,17 @@ def generate_samples_from_sentence(inputs,options):
           if left_arc_executed:
                continue
           
-          if len(stack)>=2 and stack[len(stack)-1][6]== stack[len(stack)-2][0] and not s0_has_other_children(queue, stack):
+          if len(stack)>=2:
+               for i in range(2,len(stack)+1):
+                    if stack[-1][6]==stack[-i][0] and not s0_has_other_children(queue, stack):
                #right arc
-               training_example = right_arc_return_example(queue, stack, arc_set)               
-               training_set.append(training_example)
+                         training_example = right_arc_return_example(queue, stack, arc_set,-i)               
+                         training_set.append(training_example)
+                         right_arc_executed=True
+                         break
+          if right_arc_executed:
                continue
+                         
 
           if len(queue)>0:
                #shift
